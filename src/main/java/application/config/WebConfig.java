@@ -40,8 +40,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
 
-
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -71,6 +69,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /**
      * Fix bean cookie
+     *
      * @return
      */
     @Bean

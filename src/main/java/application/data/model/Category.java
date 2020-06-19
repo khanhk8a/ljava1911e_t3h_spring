@@ -16,7 +16,7 @@ public class Category {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Product> listProducts = new ArrayList<>();
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "short_desc")
