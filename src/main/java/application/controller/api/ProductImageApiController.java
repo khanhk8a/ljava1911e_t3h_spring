@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
 @RestController
 @RequestMapping(path = "/api/product-image")
 public class ProductImageApiController {
+
 
     @Autowired
     ProductService productService;
@@ -39,30 +39,38 @@ public class ProductImageApiController {
 
     @Transactional
     @GetMapping("/fake")
-    public BaseApiResult fakeProduct() {
+    public BaseApiResult fakeProductImage() {
         BaseApiResult result = new BaseApiResult();
-        try {
-            long totalProductImages = productImageService.getTotalProductImages();
-            List<Product> productList = productService.getListAllProducts();
-            List<ProductImage> productImages = new ArrayList<>();
-            Random random = new Random();
-            int n = 0;
-            for (long i = totalProductImages + 1; i <= totalProductImages + (productList.size() * 3); i++) {
-                ProductImage productImg = new ProductImage();
-                productImg.setLink(images[random.nextInt(images.length)]);
-                productImg.setProduct(productList.get(n));
-                productImg.setCreatedDate(new Date());
-                productImages.add(productImg);
-                if (i % 3 == 0) n++;
-            }
-            productImageService.addNewListProductImage(productImages);
-            result.setSuccess(true);
-            result.setMessage("Fake list product success !");
-        } catch (Exception e) {
-            result.setSuccess(false);
-            result.setMessage(e.getMessage());
-        }
 
+        try {
+            Random random = new Random();
+            List<Product> productList = productService.getListAllProducts();
+            for(Product product : productList) {
+                if(product.getProductImageList().size() == 0) {
+                    List<ProductImage> productImages = new ArrayList<>();
+                    ProductImage productMainImage = new ProductImage();
+                    productMainImage.setLink(product.getMainImage());
+                    productMainImage.setProduct(product);
+                    productMainImage.setCreatedDate(new Date());
+
+                    productImages.add(productMainImage);
+                    for(int i=0; i<random.nextInt(2) +1 ; i++) {
+                        ProductImage productImage = new ProductImage();
+                        productImage.setLink(images[random.nextInt(images.length)]);
+                        productImage.setProduct(product);
+                        productImage.setCreatedDate(new Date());
+
+                        productImages.add(productImage);
+                    }
+                    productImageService.addNewListProductImage(productImages);
+                }
+            }
+            result.setSuccess(true);
+            result.setMessage("Fake list product images successfully !");
+        } catch (Exception e) {
+            result.setMessage(e.getMessage());
+            result.setSuccess(false);
+        }
         return result;
     }
 
