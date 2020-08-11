@@ -1,0 +1,55 @@
+<el-upload
+          list-type="picture-card"
+            action=""
+            :on-change="handleUploadChange"
+            :file-list="fileList"
+            ref="upload"
+            :auto-upload="false"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+           
+        </el-upload>
+              <el-button
+                    style="margin-left: 10px;"
+                    size="small"
+                    type="success"
+                    @click="submitUpload"
+              >upload to server</el-button>
+        
+                  
+          <div slot="tip" class="el-upload__tip"></div>
+        <el-dialog :visible.sync="dialogVisible1">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+
+
+ data() {
+    return {
+fileList: [],
+}
+
+/*file */
+
+    /**handleUploadChange */
+     handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePictureCardPreview(file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+    handleUploadChange(){     
+        this.fileList = this.$refs.upload.uploadFiles;
+    },
+      submitUpload(){
+        let file = [];
+        this.fileList.forEach(x =>
+          file.push(x.raw)
+        )
+        const formData = new FormData();
+        formData.append('upload', file[0]);
+          console.log(this.fileList[0].raw);
+         console.log(file);
+      },
+     
